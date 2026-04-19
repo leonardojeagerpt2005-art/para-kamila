@@ -1,0 +1,212 @@
+/* =========================================
+   CONFIGURACIÓN GENERAL
+   ========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  height: 100vh;
+  /* Permitimos scroll si el texto de la carta es largo */
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #0a0a0a;
+  padding-top: 60px; /* Espacio para el Notch del iPhone */
+}
+
+/* 🌌 FONDO ANIMADO */
+.background {
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 20% 30%, rgba(128, 0, 128, 0.25), transparent),
+              radial-gradient(circle at 80% 70%, rgba(0, 150, 255, 0.2), transparent),
+              #0a0a0a;
+  animation: moverFondo 20s infinite alternate linear;
+}
+
+@keyframes moverFondo {
+  from { transform: translate(-10%, -10%); }
+  to { transform: translate(10%, 10%); }
+}
+
+/* 📍 CONTENEDOR PRINCIPAL */
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  width: 100%;
+}
+
+/* 💌 SOBRE */
+.envelope {
+  position: relative;
+  width: 280px;
+  height: 180px;
+  background: #f0f0f0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
+  z-index: 15;
+}
+
+.body-env {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #e0e0e0;
+  border-radius: 0 0 10px 10px;
+  z-index: 2;
+  clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
+}
+
+.flap {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #dcdcdc;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
+  transform-origin: top;
+  transition: transform 0.6s ease;
+  z-index: 3;
+}
+
+.heart {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  z-index: 4;
+  transition: 0.5s;
+  filter: drop-shadow(0 0 10px rgba(255,0,0,0.5));
+}
+
+/* 📜 CARTA (MÁS GRANDE) */
+.letter {
+  position: absolute;
+  top: 0;
+  width: 95%;
+  max-width: 400px; /* Aumentado */
+  background: white;
+  padding: 40px 30px; /* Más aire interno */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  opacity: 0;
+  z-index: 1;
+  text-align: center;
+  transform: translateY(0) scale(0.8);
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s;
+}
+
+.letter h2 { 
+  font-family: 'Dancing Script', cursive; 
+  color: #5d1b8e; 
+  font-size: 2rem; /* Más grande */
+  margin-bottom: 10px;
+}
+
+.letter p { 
+  font-size: 1.05rem; 
+  line-height: 1.6; 
+  color: #333; 
+  text-align: justify;
+}
+
+/* 📸 TARJETAS (MUCHO MÁS GRANDES + BORDE 1REM) */
+.card {
+  position: fixed;
+  width: 230px; /* Aumentado */
+  height: 310px; /* Aumentado */
+  border: 1rem solid white; /* Tu requerimiento de 1rem */
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  overflow: hidden;
+  opacity: 0;
+  transition: 1.2s ease;
+  animation: flotar 4s infinite alternate ease-in-out;
+  z-index: 5;
+}
+
+@keyframes flotar {
+  from { transform: translateY(0) rotate(var(--rotacion)); }
+  to { transform: translateY(-20px) rotate(calc(var(--rotacion) + 2deg)); }
+}
+
+/* Posiciones estratégicas para que no tapen el centro */
+.card1 { --rotacion: -12deg; top: 5%; left: -30px; animation-delay: 0s; }
+.card2 { --rotacion: 12deg; bottom: 8%; right: -30px; animation-delay: 0.5s; }
+.card3 { --rotacion: -5deg; top: 55%; left: 5%; animation-delay: 1s; }
+
+.card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 🌹 ROSA MÁS GRANDE */
+.rosa {
+  position: fixed;
+  bottom: -150px;
+  right: 25px;
+  font-size: 90px; /* Tamaño aumentado */
+  transition: 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 25;
+}
+
+/* 🔥 ESTADO ABIERTO (CORRECCIONES IPHONE 13 PRO) */
+.abierto .flap { 
+  transform: rotateX(180deg); 
+  z-index: 0; 
+}
+
+.abierto .envelope {
+  /* El sobre baja lo suficiente para mostrar la carta gigante arriba */
+  transform: translateY(350px) scale(0.8);
+  opacity: 0.7;
+}
+
+.abierto .letter {
+  opacity: 1;
+  z-index: 20;
+  /* La carta sube un poco para centrarse en la pantalla */
+  transform: translateY(-20px) scale(1.05);
+}
+
+.abierto .card { opacity: 1; }
+.abierto .rosa { bottom: 40px; }
+.abierto .heart { opacity: 0; }
+
+/* 📱 RESPONSIVE ESPECÍFICO IPHONE 13 PRO */
+@media (max-width: 430px) {
+  .letter {
+    width: 90%;
+    padding: 30px 20px;
+  }
+  
+  .card {
+    /* Ajuste para que las fotos gigantes no bloqueen todo el móvil */
+    width: 170px;
+    height: 230px;
+    border: 0.8rem solid white; /* Borde un poco más fino en móvil para dar aire */
+  }
+
+  .card1 { top: 2%; left: -20px; }
+  .card2 { bottom: 5%; right: -20px; }
+  .card3 { top: 75%; left: -10px; }
+
+  .abierto .envelope {
+    transform: translateY(320px) scale(0.7);
+  }
+  
+  .rosa { font-size: 70px; }
+}
